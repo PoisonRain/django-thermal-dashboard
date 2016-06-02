@@ -1,0 +1,1 @@
+# django-thermal-dashboard
