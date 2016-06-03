@@ -23,6 +23,10 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
+def allresults(request):
+    qs = Question.objects.all()
+    return render(request, 'polls/allresults.html', { 'questions' : qs })
+
 def vote(request, pk):
     question = get_object_or_404(Question, pk=pk)
     try:
