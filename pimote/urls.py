@@ -18,4 +18,8 @@ urlpatterns = [
     url(r'^/playOMX', views.pimote, name='playOMX'),
     url(r'^/playMusic', views.pimote, name='playMusic'),
     url(r'^/playTwitch', views.pimote, name='playTwitch'),
+    url(r'^(?P<ip>\d+\.\d+\.\d+\.\d+):(?P<port>\d+)/setIpAddress', views.setIpAddress, name='setIpAddress'),
+    url(r'^/setIpAddress', views.pimote, name='setIpAddress'),
+    url(r'^playPrev', views.playPrev, name='playPrev'),
+    url(r'^playNext', views.playNext, name='playNext'),
 ]

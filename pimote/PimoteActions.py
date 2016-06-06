@@ -21,7 +21,7 @@ class PimoteActions(object):
         return command
         #return command.replace("'", "\\'")
 
-    def sendCommand(self, command, dry=True):
+    def sendCommand(self, command, dry=True): 
         command = self.escapeCommand(command)
         print "ssh %s@%s -p %r -t \"%s\"" % (self.user, self.ipaddress, self.port, command)
         if not dry:
@@ -64,6 +64,11 @@ class PimoteActions(object):
     def volumeDown(self):
         self.sendKeys(PimoteActions.volDownKey)
 
+    def playNext(self):
+        self.sendKeys("'playOMX next' C-m")
+
+    def playPrev(self):
+        self.sendKeys("'playOMX prev' C-m")
 
 if __name__ == "__main__":
     pim = PimoteActions('pi', '127.0.0.1', 22)
