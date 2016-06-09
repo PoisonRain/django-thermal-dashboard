@@ -9,11 +9,12 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="shortcut icon" type="image/x-icon" href="{% static 'pimote/piicon.png' %}"/>
 	<title>{% block page_title_block %}Philosophical Polls{% endblock %}</title>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 	<nav class="green darken-2">
 		<div class="top-nav">
 			<div class="container">
 				<div class="nav-wrapper">
-					<img class="circle" src="{% static 'pimote/piicon.png' %}" style="height: 5%; width: 5%;" />
+					<img class="circle grey lighten-2" src="{% static 'pimote/piicon.png' %}" style="height: 5%; width: 5%;" />
 					<a href="#" class="brand-logo">{% block title_block %}Philosophical Polls{% endblock %}</a>
 					<ul id="nav-mobile" class="right hide-on-med-and-down">
 						<li><a href="/pimote/" class="green darken-1">Pimote</a></li>
@@ -26,9 +27,7 @@
 	</nav>
 </head>
 <body class="">
-	<div class="container">
 	{% block body_block %}{% endblock %}
-	</div>
         {% block footer %}
                 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
                 <script type="text/javascript" src="{% static 'polls/js/materialize.js' %}"></script>

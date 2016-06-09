@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'persistentchat.apps.PersistentchatConfig',
     'polls.apps.PollsConfig',
     'pimote.apps.PimoteConfig',
     'django.contrib.admin',
