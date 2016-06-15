@@ -15,9 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth.views import login,logout
 
 urlpatterns = [
+    url(r'^', include('polls.urls')),
     url(r'^admin/', admin.site.urls),
+		url(r'^accounts/login/',  login, {'template_name' : 'admin/login.html'}),
+		url(r'^accounts/logout/',  logout),
     url(r'^polls/', include('polls.urls')),
     url(r'^pimote/', include('pimote.urls')),
+    url(r'^chat/', include('persistentchat.urls')),
 ]
