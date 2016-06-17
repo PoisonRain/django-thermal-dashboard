@@ -7,9 +7,7 @@
                                 <div class="card-content">
                                         <span class="card-title">{{ question.question_text }}</span>
 					{% if question %}
-					    {% for c in question.choice_set.all %}
-						<p class="collection-item">{{c.choice_text}} <span class="badge">{{ c.votes }} votes{{ choice.votes|pluralize }}</span></p>
-					    {% endfor %}
+							<div id="chartcontainer" style="min-width: 310px; max-width: 800 px; height 400px; margin: 0 auto"></div>
 					<div class="card-action">	
 					    <a class="waves-effect waves-light red darken-2 btn" href="{% url 'polls:detail' question.id %}">Vote again?</a>
 					</div>
@@ -20,4 +18,72 @@
                         </div>
                 </div>
         </div>
+				<script src="https://code.highcharts.com/modules/exporting.js"></script>
+				<script src="https://code.highcharts.com/highcharts.js"></script>
+				<script type="text/javascript">
+						$(function () {
+							$('#chartcontainer').highcharts(
+							{
+								chart: {
+									type: 'bar'
+								},
+								title: {
+									text: null
+								},
+								subtitle: {
+									text: null
+								},
+								xAxis: {
+									categories: [
+										{% for c in question.choice_set.all %}
+										"{{ c.choice_text }}",
+										{% endfor %}
+									],
+									title: {
+										text: null
+									}
+								},
+								yAxis: {
+									min: 0,
+									title: {
+										text: "Votes",
+										align: 'high'
+									},
+									labels: {
+										overflow: 'justify'
+									}
+								},
+								tooltip: {
+									valueSuffix: ' votes'
+								},
+								plotOptions: {
+									bar: {
+										dataLabels: {
+											enabled: true
+										}
+									},
+									legend: {
+										layout: 'horizontal',
+										align: 'bottom',
+										x: 80,
+										y: -40,
+										floating: true,
+										borderWidth: 1,
+										backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+										shadow: true
+									}
+								},
+								series: [
+									{
+										name: 'Votes',
+										data: [
+										{% for c in question.choice_set.all %}
+											{{ c.votes }},
+										{% endfor %}
+										]
+									}
+								]
+							});
+						});
+				</script>
 {% endblock %}
