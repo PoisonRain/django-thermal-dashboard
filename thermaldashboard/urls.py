@@ -24,5 +24,5 @@ urlpatterns = [
 		url(r'^accounts/logout/',  logout),
     url(r'^polls/', include('polls.urls')),
     url(r'^pimote/', include('pimote.urls')),
-    url(r'^chat/', include('persistentchat.urls')),
+    url(r'^chat/', include('chat.urls')),
 ]

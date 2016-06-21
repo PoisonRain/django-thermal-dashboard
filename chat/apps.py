@@ -3,5 +3,5 @@ from __future__ import unicode_literals
 from django.apps import AppConfig
 
 
-class PersistentchatConfig(AppConfig):
-    name = 'persistentchat'
+class ChatConfig(AppConfig):
+    name = 'chat'

@@ -6,6 +6,7 @@
 *.pot
 *.swp
 *.py[co]
+*.old
 __pycache__
 MANIFEST
 dist/

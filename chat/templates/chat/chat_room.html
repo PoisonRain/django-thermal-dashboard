@@ -1,0 +1,157 @@
+{% extends 'chat/base.html' %}
+
+{% block body_style %}
+	{% if room.color %}
+		background: {{ room.color.color }}
+	{% endif %}
+{% endblock %}
+
+
+{% block body_block %}
+		{% if room.color %}
+		<div class="">
+			<div class="container">
+				<h4 style="color: white">{{ room.title }}</h4>
+				<div class="container card row">
+		{% else %}
+		<div class="">
+			<div class="container">
+				<h4 style="">{{ room.title }}</h4>
+				<div class="container card row">
+		{% endif %}	
+			<div id="message_list_div" class="card-content" style="height: 400px; overflow: auto">
+				<ul id="message_list">
+				</ul>
+			</div>
+		</div>
+		<div class="container card row">
+			<div class="col s12 l12 m12">
+				<div class="card-content">
+					<label for="input_message" class="">Enter Message: <textarea id="input_message" class="materialize-textarea" style="color: {{ user_color.color }}"></textarea></label>
+				</div>
+				<div class="card-action">
+					<a id="submit_message" class="grey btn">Submit</a>
+				</div>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script type="text/javascript">
+			window.setInterval(refreshContent, 2000);
+			$(focus_and_clear_and_scroll);
+
+			function focus_and_clear_and_scroll() {
+				$("#input_message").val('');
+				$("#input_message").focus();
+				refreshContent();
+				$("#message_list_div").scrollTop($("#message_list_div")[0].scrollHeight);
+			}
+
+			function isEmptyOrSpaces(str){
+				return str === null || $.trim(str) === "";
+			}
+
+			var lastMessage = "";
+			function refreshContent() {
+				$.post("/chat/{{room.title}}/get_last_message",
+					{
+						csrfmiddlewaretoken: "{{ csrf_token }}",
+					},
+					function(data, status) {
+						newestMessage = data;
+						console.log(data);
+						if(lastMessage === "") {
+							lastMessage = newestMessage;
+							console.log("true"); updateContent();
+						}
+						else if(lastMessage === newestMessage) {
+							console.log("false");
+						}
+						else {
+							console.log(newestMessage);
+							lastMessage = newestMessage;
+							console.log("true");
+							updateContent();
+						}
+					}
+				);
+			}
+
+			function updateContent() {
+					$.post("/chat/{{room.title}}/get_content",
+						{
+							csrfmiddlewaretoken: "{{ csrf_token }}"
+						},
+						function(data, status) {
+							$("#message_list").html(data);
+						}
+					);
+			}
+
+			function submit_chat() {
+					var message_text = $("#input_message").val();
+					$.post("/chat/{{room.title}}/message",
+						{
+							csrfmiddlewaretoken: "{{ csrf_token }}",
+							message: message_text
+						},
+						function(data, status) {
+							location.reload();
+						}
+					);
+			}
+
+			$("#submit_message").click(submit_chat);
+			$("textarea").keypress(function(event) {
+				if(event.which == 13) {
+					event.preventDefault();
+					submit_chat();
+				}
+			});
+
+
+
+/*
+	 Notification Section
+*/
+
+			// Determine the correct object to use
+			var notification = window.Notification || window.mozNotification || window.webkitNotification;
+
+			// The user needs to allow this
+			if ('undefined' === typeof notification)
+				alert('Web notification not supported');
+			else
+				notification.requestPermission(function(permission){});
+
+			// A function handler
+			function notify(titleText, bodyText)
+			{
+				if ('undefined' === typeof notification)
+					return false;       //Not supported....
+				var noty = new notification(
+				titleText, {
+					body: bodyText,
+					dir: 'auto', // or ltr, rtl
+					lang: 'EN', //lang used within the notification.
+					tag: 'notificationPopup', //An element ID to get/set the content
+					icon: '' //The URL of an image to be used as an icon
+				}
+				);
+				noty.onclick = function () {
+					console.log('notification.Click');
+				};
+				noty.onerror = function () {
+					console.log('notification.Error');
+				};
+				noty.onshow = function () {
+					console.log('notification.Show');
+				};
+				noty.onclose = function () {
+					console.log('notification.Close');
+				};
+				return true;
+			}
+		</script>
+	</div>
+</div>
+{% endblock %}

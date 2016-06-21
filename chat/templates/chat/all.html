@@ -1,0 +1,25 @@
+{% extends 'chat/base.html' %}
+
+{% block body_block %}
+<div class="container">
+	<h3>All Chat Rooms</h3>
+	{% for room in chat_rooms %}
+		<div class="row">
+			<div class="col s12 m6">
+				{% if room.color %}
+					<div class="card hoverable {{ room.color.getDarkened1 }}">
+				{% else %}
+					<div class="card hoverable grey">
+				{% endif%}
+					<div class="card-content">
+						<span class="card-title">{{ room.title }}</span>
+						<div class="card-action">	
+							<a class="waves-effect waves-light grey darken-2 btn" href="/chat/{{room.title}}/">Join Room</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+</div>
+{% endblock %}
