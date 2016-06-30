@@ -17,6 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import login,logout
 
+from views import locked_out
+
 urlpatterns = [
     url(r'^', include('polls.urls')),
     url(r'^admin/', admin.site.urls),
@@ -25,4 +27,8 @@ urlpatterns = [
     url(r'^polls/', include('polls.urls')),
     url(r'^pimote/', include('pimote.urls')),
     url(r'^chat/', include('chat.urls')),
+		url(r'^locked/$', locked_out, name='locked_out'),
+		url(r'^captcha/', include('captcha.urls')),
 ]
+
+

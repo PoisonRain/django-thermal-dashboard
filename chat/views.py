@@ -3,6 +3,8 @@ from django.http.response import HttpResponse
 from chat.models import Chat_Room,Message,Chat_User
 from django.contrib.auth.decorators import login_required
 
+from django_otp.decorators import otp_required
+
 # Create your views here.
 
 def getRoom(room_name):
@@ -55,12 +57,16 @@ def send_message(request, room_name):
 def get_content(request, room_name):
 	room = getRoom(room_name)
 	if room is not None:
-		return HttpResponse("\n".join([m.as_html() for m in room.message_set.all()]))
+		return HttpResponse("\n".join([m.as_html() for m in room.message_set.all()][-100:]))
 	return HttpResponse("No room by that name")
 
 @login_required
 def get_last_message(request, room_name):
 	room = getRoom(room_name)
 	if room is not None:
-		return HttpResponse([m.as_html() for m in room.message_set.all()][-1])
+		messages = room.message_set.filter(chat_room=room).order_by('-id')
+		if len(messages) > 0:
+			return HttpResponse(room.message_set.filter(chat_room=room).order_by('-id')[0])
+		else:
+			return HttpResponse("No Messages")
 	return HttpResponse("Invalid Room")

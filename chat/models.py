@@ -77,16 +77,20 @@ class Message(models.Model):
 		return Message.link_regex.sub(replace, message_text)
 
 	def as_html(self):
-		message_text = conditional_escape(self.text)
+		message_text = self.text
+		message_text = conditional_escape(message_text)
+		message_text = message_text.replace("\r\n", "<br />")
+		message_text = message_text.replace("\n", "<br />")
 		message_text = self.URLIFY(message_text)
 		username = conditional_escape(self.chat_user.django_user.username)
 		template_string = """
-		<li class=\"\" style=\"color: %s; word-wrap: break-word\">%s: %s
+		<li class=\"\" style=\"color: %s; word-wrap: break-word; text-size: 12px\">
 			<span class=\"\" style=\"float: right\">%s</span>
-			<div class="divider"></div>
+			%s: %s
 		</li>
+		<div class="divider"></div>
 		"""
-		return mark_safe(template_string % (self.chat_user.color.color, username, message_text, self.readableDate()))
+		return mark_safe(template_string % (self.chat_user.color.color, self.readableDate(), username, message_text))
 
 	def __str__(self):
 		return "%s: %s\n%s" % (self.chat_user.django_user.username, self.text, self.send_date)

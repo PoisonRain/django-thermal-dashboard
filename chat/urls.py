@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url,include
 from django.contrib.auth.views import login
 from . import views
 
@@ -12,4 +12,5 @@ urlpatterns = [
 	#url(r'^(?P<pk>[0-9]+)/results/$', views.ResultsView.as_view(), name='results'),
 	#url(r'^(?P<pk>[0-9]+)/vote/$', views.vote, name='vote'),
 	#url(r'^allresults/$', views.allresults, name='allresults'),
+	url(r'^captcha/', include('captcha.urls')),
 ]
