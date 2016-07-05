@@ -13,10 +13,10 @@
 		<div class="top-nav">
 			<div class="container">
 				<div class="nav-wrapper">
-					<img class="responsive-img circle z-depth-5" src="{% block icon_block %}{% static 'chat/images/sound.png' %}{% endblock %}" style="width: 6%">
+					<img class="responsive-img circle z-depth-5{% block icon_background_block %}{% endblock %}" src="{% block icon_block %}{% static 'chat/images/sound.png' %}{% endblock %}" style="width: 6%">
 					<span style="padding-left: 20px"><a href="/chat" class="brand-logo">{% block header_title_block %}Garrulous{% endblock %}</a></span>
 					<ul id="nav-mobile" class="right hide-on-med-and-down">
-						<li class="grey darken-4"><a href="/chat/">Chat</a></li>
+						<li class="blue darken-4"><a href="/chat/">Chat</a></li>
 						<li class="red accent-4"><a href="/polls/">Polls</a></li>
 						<li class="green"><a href="/pimote/">Pimote</a></li>
 						<li class="grey darken-4"><a href="/accounts/logout/">Logout</a></li>
@@ -35,7 +35,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col s6">
-						<h5 class="white-text">{% block footer_title_text %}Garrulous{% endblock %}</h5>
+						<h5 class="white-text">{% block footer_title_block %}Garrulous{% endblock %}</h5>
 					</div>
 					<div class="col s6">
 						<h5 class="white-text">My Other Projects</h5>

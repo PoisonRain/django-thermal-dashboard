@@ -3,7 +3,15 @@
 {% load staticfiles %}
 
 {% block page_title_block %}Pimote{% endblock %}
-{% block title_block %}Pimote{% endblock %}
+{% block header_title_block %}Pimote{% endblock %}
+{% block footer_title_block %}Pimote{% endblock %}
+{% block header_color_block %}green darken-1{% endblock %}
+{% block footer_color_block %}green darken-1{% endblock %}
+
+{% block favicon_block %}{% static 'pimote/piicon.png' %}{% endblock %}
+{% block icon_block %}{% static 'pimote/piicon.png' %}{% endblock %}
+
+{% block icon_background_block %}white{% endblock %}
 
 {% block body_block %}
 <link type="text/css" rel="stylesheet" href="{% static 'pimote/pimote.css' %}" media="screen,projection" />
