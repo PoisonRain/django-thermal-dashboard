@@ -1,0 +1,24 @@
+{% extends 'chat/base.html' %}
+
+{% load staticfiles %}
+
+{% block page_title_block %}Philosophical Polls{% endblock %}
+{% block header_title_block %}Philosophical Polls{% endblock %}
+{% block header_color_block %}red darken-1{% endblock %}
+{% block footer_color_block %}red darken-1{% endblock %}
+
+{% block favicon_block %}{% static 'polls/icon.png' %}{% endblock %}
+{% block icon_block %}{% static 'polls/icon.png' %}{% endblock %}
+
+{% block sidebar_block %}
+<nav>
+	<ul id="right hide-on-med-and-down">
+		<li><a href="/polls/allresults">All Results</a></li>
+		<li><a href="/polls/">Polls</a></li>
+	</ul>
+	<a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+</nav>
+<script type="text/javascript"> 
+
+</script>
+{% endblock %}

@@ -1,6 +1,7 @@
-{% extends 'polls/base.html' %}
+{% extends 'polls/pollBase.html' %}
 
 {% block body_block %}
+<div class="container">
 {% if latest_question_list %}
 		<ul>
 		{% for question in latest_question_list %}
@@ -11,4 +12,5 @@
 {% else %}
 	<p>No polls are available.</p>
 {% endif %}
+</div>
 {% endblock %}

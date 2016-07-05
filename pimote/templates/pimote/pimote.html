@@ -1,109 +1,103 @@
-{% extends 'pimote/base.html' %}
+{% extends 'chat/base.html' %}
 
 {% block page_title_block %}Pimote{% endblock %}
 {% block title_block %}Pimote{% endblock %}
 
 {% block body_block %}
-<div class="row">
-<div class="col s2 grey">
-<ul>
-	<li>applesauce</li>
-</ul>
-</div>
-<div class="col s8">
-<form id="detailform" action="">
+<div class="container">
 	<div class="row">
-		<div class="col s12 m12 l12" >
-			<input id="detailText" style="padding-top: 50px; font-size: 3rem; text-align: center;" type="text" name="details"/>
+		<div class="col s8">
+			<form id="detailform" action="">
+				<div class="row">
+					<div class="col s12 m12 l12" >
+						<input id="detailText" style="padding-top: 50px; font-size: 3rem; text-align: center;" type="text" name="details"/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s3 m3 l3 pdiv">
+						<a id="playVideoSubmit" class="green btn darken-2 waves-light waves-effect plowerbtn z-depth-3"><br/>Video</a>
+					</div>
+					<div class="col s3 m3 l3 pdiv">
+						<a id="playMusicSubmit" class="green btn darken-2 waves-light waves-effect plowerbtn z-depth-3"><br/>Music</a>
+					</div>
+					<div class="col s3 m3 l3 pdiv">
+						<a id="playTwitchSubmit" class="green btn darken-2 waves-light waves-effect plowerbtn z-depth-3"><br/>Twitch</a>
+					</div>
+					<div class="col s3 m3 l3 pdiv">
+						<a id="setIpSubmit" class="green btn darken-2 waves-light waves-effect plowerbtn z-depth-3"><br/>IP</a>
+					</div>
+				</div>
+			</form>
+			<div class="row" style="">
+				<div class="col s4 m4 l4  offset-l4 offset-m4 pdiv">
+					<a id="quitBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">close</i></a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s4 m4 l4 pdiv">
+					<a id="rwBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">fast_rewind</i></a>
+				</div>
+				<div class="col s4 m4 l4 pdiv">
+					<a id="pauseBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">pause</i></a>
+				</div>
+				<div class="col s4 m4 l4 pdiv">
+					<a id="ffBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">fast_forward</i></a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s4 m4 l4 pdiv">
+					<a id="volDownBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">volume_down</i></a>
+				</div>
+				<div class="col s4 m4 l4 pdiv">
+					<a id="subtitleBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">subtitles</i></a>
+				</div>
+				<div class="col s4 m4 l4 pdiv">
+					<a id="volUpBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">volume_up</i></a>
+				</div>
+			</div>
+			<div class="row"style="margin-bottom: 50px !important;">
+				<div class="col s4 m4 l4 pdiv offset-l2 offset-m2">
+					<a id='prevBtn' class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">skip_previous</i></a>
+				</div>
+				<div class="col s4 m4 l4 pdiv">
+					<a id='nextBtn' class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">skip_next</i></a>
+				</div>
+			</div>
+			<script src="https://code.jquery.com/jquery-1.10.2.js"></script> 
+			<script type="text/javascript">
+				$('#playVideoSubmit').click(function() {
+					var details = $('#detailText').val();
+					window.location.href = '/pimote/'+details+'/playOMX';
+				});
+				$('#playMusicSubmit').click(function() {
+					var details = $('#detailText').val();
+					window.location.href = '/pimote/'+details+'/playMusic';
+				});
+				$('#playTwitchSubmit').click(function() {
+					var details = $('#detailText').val();
+					window.location.href = '/pimote/'+details+'/playTwitch';
+				});
+				$('#setIpSubmit').click(function() {
+					var details = $('#detailText').val();
+					window.location.href = '/pimote/'+details+'/setIpAddress';
+				});
+				function callPage(bUrl) {
+					$.ajax({
+						url: bUrl,
+						type: 'GET'
+					});
+				}
+				$('#quitBtn').click(callPage.bind(null,'/pimote/quit'));
+				$('#rwBtn').click(callPage.bind(null,'/pimote/rw'));
+				$('#pauseBtn').click(callPage.bind(null,'/pimote/pause'));
+				$('#ffBtn').click(callPage.bind(null,'/pimote/ff'));
+				$('#volDownBtn').click(callPage.bind(null,'/pimote/volumedown'));
+				$('#volUpBtn').click(callPage.bind(null,'/pimote/volumeup'));
+				$('#subtitleBtn').click(callPage.bind(null,'/pimote/togglesubtitles'));
+				$('#prevBtn').click(callPage.bind(null,'/pimote/playPrev'));
+				$('#nextBtn').click(callPage.bind(null,'/pimote/playNext'));
+			</script> 
 		</div>
 	</div>
-	<div class="row">
-		<div class="col s3 m3 l3 pdiv">
-			<a id="playVideoSubmit" class="green btn darken-2 waves-light waves-effect plowerbtn z-depth-3"><br/>Video</a>
-		</div>
-		<div class="col s3 m3 l3 pdiv">
-			<a id="playMusicSubmit" class="green btn darken-2 waves-light waves-effect plowerbtn z-depth-3"><br/>Music</a>
-		</div>
-		<div class="col s3 m3 l3 pdiv">
-			<a id="playTwitchSubmit" class="green btn darken-2 waves-light waves-effect plowerbtn z-depth-3"><br/>Twitch</a>
-		</div>
-		<div class="col s3 m3 l3 pdiv">
-			<a id="setIpSubmit" class="green btn darken-2 waves-light waves-effect plowerbtn z-depth-3"><br/>IP</a>
-		</div>
-	</div>
-</form>
-<div class="row" style="">
-	<div class="col s4 m4 l4  offset-l4 offset-m4 pdiv">
-		<a id="quitBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">close</i></a>
-	</div>
-</div>
-<div class="row">
-	<div class="col s4 m4 l4 pdiv">
-		<a id="rwBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">fast_rewind</i></a>
-	</div>
-	<div class="col s4 m4 l4 pdiv">
-		<a id="pauseBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">pause</i></a>
-	</div>
-	<div class="col s4 m4 l4 pdiv">
-		<a id="ffBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">fast_forward</i></a>
-	</div>
-</div>
-<div class="row">
-	<div class="col s4 m4 l4 pdiv">
-		<a id="volDownBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">volume_down</i></a>
-	</div>
-	<div class="col s4 m4 l4 pdiv">
-		<a id="subtitleBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">subtitles</i></a>
-	</div>
-	<div class="col s4 m4 l4 pdiv">
-		<a id="volUpBtn" class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">volume_up</i></a>
-	</div>
-</div>
-<div class="row"style="margin-bottom: 50px !important;">
-	<div class="col s4 m4 l4 pdiv offset-l2 offset-m2">
-		<a id='prevBtn' class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">skip_previous</i></a>
-	</div>
-	<div class="col s4 m4 l4 pdiv">
-		<a id='nextBtn' class="pink darken-2 btn waves-light waves-effect pbtn z-depth-3"><i class="material-icons picon">skip_next</i></a>
-	</div>
-</div>
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script> 
-<script type="text/javascript">
-	$('#playVideoSubmit').click(function() {
-		var details = $('#detailText').val();
-		window.location.href = '/pimote/'+details+'/playOMX';
-	});
-	$('#playMusicSubmit').click(function() {
-		var details = $('#detailText').val();
-		window.location.href = '/pimote/'+details+'/playMusic';
-	});
-	$('#playTwitchSubmit').click(function() {
-		var details = $('#detailText').val();
-		window.location.href = '/pimote/'+details+'/playTwitch';
-	});
-	$('#setIpSubmit').click(function() {
-		var details = $('#detailText').val();
-		window.location.href = '/pimote/'+details+'/setIpAddress';
-	});
-	function callPage(bUrl) {
-		$.ajax({
-			url: bUrl,
-			type: 'GET'
-		});
-	}
-	$('#quitBtn').click(callPage.bind(null,'/pimote/quit'));
-	$('#rwBtn').click(callPage.bind(null,'/pimote/rw'));
-	$('#pauseBtn').click(callPage.bind(null,'/pimote/pause'));
-	$('#ffBtn').click(callPage.bind(null,'/pimote/ff'));
-	$('#volDownBtn').click(callPage.bind(null,'/pimote/volumedown'));
-	$('#volUpBtn').click(callPage.bind(null,'/pimote/volumeup'));
-	$('#subtitleBtn').click(callPage.bind(null,'/pimote/togglesubtitles'));
-	$('#prevBtn').click(callPage.bind(null,'/pimote/playPrev'));
-	$('#nextBtn').click(callPage.bind(null,'/pimote/playNext'));
-</script> 
-</div>
-<div class="col s2">
-	<a>applesauces</a>
-</div>
 </div>
 {% endblock %}

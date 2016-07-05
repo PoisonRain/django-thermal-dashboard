@@ -5,20 +5,20 @@
 <html>
 <head>
 	<link type="text/css" rel="stylesheet" href="{% static 'polls/css/materialize.css' %}" media="screen,projection" />
-	<link rel="shortcut icon" type="image/x-icon" href="{% static 'chat/images/sound.png' %}"/>
-	<title >Garrulous</title>
+	<link rel="shortcut icon" type="image/x-icon" href="{% block favicon_block %}{% static 'chat/images/sound.png' %}{% endblock %}"/>
+	<title>{% block page_title_block %}Garrulous{% endblock %}</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-	<nav class="black">
+	<nav class="{% block header_color_block %}black{% endblock %}">
 		<div class="top-nav">
 			<div class="container">
 				<div class="nav-wrapper">
-					<img class="responsive-img circle z-depth-5" src="{% static 'chat/images/sound.png' %}" style="width: 6%">
-					<span style="padding-left: 20px"><a href="/chat" class="brand-logo">Garrulous</a></span>
+					<img class="responsive-img circle z-depth-5" src="{% block icon_block %}{% static 'chat/images/sound.png' %}{% endblock %}" style="width: 6%">
+					<span style="padding-left: 20px"><a href="/chat" class="brand-logo">{% block header_title_block %}Garrulous{% endblock %}</a></span>
 					<ul id="nav-mobile" class="right hide-on-med-and-down">
-						<li><a href="/chat/">Chat</a></li>
-						<li><a href="/polls/allresults/">Polls</a></li>
-						<li><a href="/polls/">Index</a></li>
-						<li><a href="/accounts/logout/">Logout</a></li>
+						<li class="grey darken-4"><a href="/chat/">Chat</a></li>
+						<li class="red accent-4"><a href="/polls/">Polls</a></li>
+						<li class="green"><a href="/pimote/">Pimote</a></li>
+						<li class="grey darken-4"><a href="/accounts/logout/">Logout</a></li>
 					</ul>
 				</div>
 			</div>
@@ -26,14 +26,15 @@
 	</nav>
 </head>
 <body style="{% block body_style %}{% endblock %}">
+	{% block sidebar_block %}{% endblock %}
 	{% block body_block %}{% endblock %}
 	{% block footer %}
 		<script type="text/javascript" src="{% static 'polls/js/materialize.js' %}"></script>
-		<footer class="page-footer black">
+		<footer class="page-footer {% block footer_color_block %}black{% endblock %}">
 			<div class="container">
 				<div class="row">
 					<div class="col s6">
-						<h5 class="white-text">Garrulous</h5>
+						<h5 class="white-text">{% block footer_title_text %}Garrulous{% endblock %}</h5>
 					</div>
 					<div class="col s6">
 						<h5 class="white-text">My Other Projects</h5>

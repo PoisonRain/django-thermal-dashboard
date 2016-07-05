@@ -8,18 +8,15 @@
 
 
 {% block body_block %}
+		<div class="">
 		{% if room.color %}
-		<div class="">
-			<div class="container">
-				<h4 style="color: white">{{ room.title }}</h4>
-				<div class="card row">
+			<h4 style="color: white; float: left; margin-left: 10px">{{ room.title }}</h4>
 		{% else %}
-		<div class="">
-			<div class="container">
-				<h4 style="">{{ room.title }}</h4>
-				<div class="card row">
+			<h4 style="float: left; margin-left: 10px">{{ room.title }}</h4>
 		{% endif %}	
-			<div id="message_list_div" class="card-content" style="height: 500px; overflow: auto">
+			<div class="container">
+				<div class="card row" style="margin-top: 25px">
+			<div id="message_list_div" class="card-content" style="height: 550px; overflow: auto">
 				<ul id="message_list">
 				</ul>
 			</div>
