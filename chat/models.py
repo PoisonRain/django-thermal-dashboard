@@ -72,7 +72,8 @@ class Message(models.Model):
 	send_date = models.DateTimeField(default = timezone.now)
 	chat_room = models.ForeignKey(Chat_Room, on_delete=models.CASCADE)
 	chat_user = models.ForeignKey(Chat_User, on_delete=models.CASCADE)
-	
+	color = models.ForeignKey(Color, on_delete=models.CASCADE, null=True)
+	user_nickname = models.CharField(max_length=100, null=True)	
 	
 	def readableDate(self):
 		date = self.send_date - timedelta(hours=6)
@@ -94,7 +95,7 @@ class Message(models.Model):
 		message_text = message_text.replace("\r\n", "<br />")
 		message_text = message_text.replace("\n", "<br />")
 		message_text = self.URLIFY(message_text)
-		username = conditional_escape(self.chat_user.get_name())
+		username = conditional_escape(self.get_nickname())
 		template_string = """
 		<li class=\"\" style=\"color: %s; word-wrap: break-word; text-size: 12px\">
 			<span class=\"\" style=\"float: right\">%s</span>
@@ -102,11 +103,20 @@ class Message(models.Model):
 		</li>
 		<div class="divider"></div>
 		"""
-		return mark_safe(template_string % (self.chat_user.color.color, self.readableDate(), username, message_text))
+		return mark_safe(template_string % (self.get_color().color, self.readableDate(), username, message_text))
 
 	def __str__(self):
 		return "%s: %s\n%s" % (self.chat_user.django_user.username, self.text, self.send_date)
 
 	def __repr__(self):
-	    return self.__str__()
-
+		return self.__str__()
+	
+	def get_color(self):
+		if self.color is None:
+			return self.chat_user.color
+		return self.color
+	
+	def get_nickname(self):
+		if self.user_nickname is None or self.user_nickname == "":
+			return self.chat_user.get_name()
+		return self.user_nickname

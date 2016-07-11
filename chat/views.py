@@ -52,6 +52,8 @@ def send_message(request, room_name):
 				message.text = message_text
 				message.chat_room = room
 				message.chat_user = chatuser
+				message.color = chatuser.color
+				message.user_nickname = chatuser.get_name()
 				message.save()
 				return HttpResponse("Success")
 		return HttpResponse("Invalid Room")
