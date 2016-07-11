@@ -32,6 +32,12 @@ class Color(models.Model):
 	def getDarkened2(self):
 		return self.getDarkened(2)
 	
+	def getDarkened3(self):
+		return self.getDarkened(3)
+
+	def getDarkened4(self):
+		return self.getDarkened(4)
+	
 	def getLightened1(self):
 		return self.getLightened(1)
 
@@ -50,10 +56,16 @@ class Chat_Room(models.Model):
 
 class Chat_User(models.Model):
 	django_user = models.OneToOneField(User, default=None, on_delete=models.CASCADE)
+	nickname = models.CharField(max_length=100, null=True)
 	color = models.ForeignKey(Color, on_delete=models.CASCADE)
 
 	def __str__(self):
 		return str(self.django_user)
+
+	def get_name(self):
+		if self.nickname is None or self.nickname=="":
+			return self.django_user.username
+		return self.nickname
 
 class Message(models.Model):
 	text = models.CharField(max_length=500)
@@ -82,7 +94,7 @@ class Message(models.Model):
 		message_text = message_text.replace("\r\n", "<br />")
 		message_text = message_text.replace("\n", "<br />")
 		message_text = self.URLIFY(message_text)
-		username = conditional_escape(self.chat_user.django_user.username)
+		username = conditional_escape(self.chat_user.get_name())
 		template_string = """
 		<li class=\"\" style=\"color: %s; word-wrap: break-word; text-size: 12px\">
 			<span class=\"\" style=\"float: right\">%s</span>

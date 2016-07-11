@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http.response import HttpResponse
 from chat.models import Chat_Room,Message,Chat_User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import UpdateView
 
 from django_otp.decorators import otp_required
 
@@ -27,14 +29,16 @@ def getUserColor(request):
 @login_required
 def view_all_rooms(request):
 	chat_rooms = Chat_Room.objects.all()
-	context = { "chat_rooms" : chat_rooms }
+	chat_user = getChat_User(request)
+	context = { "chat_rooms" : chat_rooms, "chat_user" : chat_user }
 	return render(request, "chat/all.html", context)
 
 @login_required
 def view_room(request, room_name):
 	room = getRoom(room_name)
 	user_color = getUserColor(request)
-	context = { "room" : room, "user_color" : user_color }
+	chat_user = getChat_User(request)
+	context = { "room" : room, "user_color" : user_color, "chat_user" : chat_user }
 	return render(request, "chat/chat_room.html", context)
 
 @login_required
@@ -70,3 +74,18 @@ def get_last_message(request, room_name):
 		else:
 			return HttpResponse("No Messages")
 	return HttpResponse("Invalid Room")
+
+
+class chat_user_update(LoginRequiredMixin, UpdateView):
+	model = Chat_User
+	fields = ['color', 'nickname']
+	template_name_suffix='_update_form'
+
+	def dispatch(self, request, *args, **kwargs):
+		obj = self.get_object()
+		user = getChat_User(request)
+		print type(obj),str(obj),obj.id
+		print type(user),str(user),user.id
+		if obj.django_user.id == self.request.user.id:
+			return super(chat_user_update, self).dispatch(request, *args, **kwargs)
+		return redirect('/chat')

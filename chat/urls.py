@@ -13,4 +13,5 @@ urlpatterns = [
 	#url(r'^(?P<pk>[0-9]+)/vote/$', views.vote, name='vote'),
 	#url(r'^allresults/$', views.allresults, name='allresults'),
 	url(r'^captcha/', include('captcha.urls')),
+	url(r'^(?P<pk>\d+)/edit_user$', views.chat_user_update.as_view(success_url='/chat'), name='chat_user_update'),
 ]

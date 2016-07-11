@@ -9,9 +9,10 @@
 {% block footer_color_block %}green darken-1{% endblock %}
 
 {% block favicon_block %}{% static 'pimote/piicon.png' %}{% endblock %}
-{% block icon_block %}{% static 'pimote/piicon.png' %}{% endblock %}
+#built in html injection is a feature, not a result of my laziness /s
+{% block icon_block %}{% static 'pimote/piicon.png' %}" style="background-color: white; width: 6%{% endblock %}
 
-{% block icon_background_block %}white{% endblock %}
+{% block icon_background_block %}{% endblock %}
 
 {% block body_block %}
 <link type="text/css" rel="stylesheet" href="{% static 'pimote/pimote.css' %}" media="screen,projection" />

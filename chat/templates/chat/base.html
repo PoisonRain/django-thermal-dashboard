@@ -13,9 +13,10 @@
 		<div class="top-nav">
 			<div class="container">
 				<div class="nav-wrapper">
-					<img class="responsive-img circle z-depth-5{% block icon_background_block %}{% endblock %}" src="{% block icon_block %}{% static 'chat/images/sound.png' %}{% endblock %}" style="width: 6%">
+					<img class="responsive-img circle z-depth-5 {% block icon_background_block %}white{% endblock %}" src="{% block icon_block %}{% static 'chat/images/sound.png' %}{% endblock %}" style="width: {% block icon_size_percentage_block %}6{% endblock %}%">
 					<span style="padding-left: 20px"><a href="/chat" class="brand-logo">{% block header_title_block %}Garrulous{% endblock %}</a></span>
 					<ul id="nav-mobile" class="right hide-on-med-and-down">
+						{% block nav_buttons_block %}{% endblock %}
 						<li class="blue darken-4"><a href="/chat/">Chat</a></li>
 						<li class="red accent-4"><a href="/polls/">Polls</a></li>
 						<li class="green"><a href="/pimote/">Pimote</a></li>

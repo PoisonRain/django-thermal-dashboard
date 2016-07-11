@@ -6,6 +6,9 @@
 	{% endif %}
 {% endblock %}
 
+{% block nav_buttons_block %}
+<li class="grey darken-4"><a href="/chat/{{ chat_user.id }}/edit_user">User</a></li>
+{% endblock %}
 
 {% block body_block %}
 		<div class="">
@@ -32,6 +35,7 @@
 			</div>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<!-- --><script src="" type=""></script>
 		<script type="text/javascript">
 			window.setInterval(refreshContent, 1500);
 			$(focus_and_clear_and_scroll);

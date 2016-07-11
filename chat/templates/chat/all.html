@@ -1,5 +1,9 @@
 {% extends 'chat/base.html' %}
 
+{% block nav_buttons_block %}
+<li class="grey darken-4"><a href="/chat/{{ chat_user.id }}/edit_user">User</a></li>
+{% endblock %}
+
 {% block body_block %}
 <div class="container">
 	<h3>All Chat Rooms</h3>
@@ -7,7 +11,7 @@
 		<div class="row">
 			<div class="col s12 m6">
 				{% if room.color %}
-					<div class="card hoverable {{ room.color.getDarkened1 }}">
+					<div class="card hoverable {{ room.color.getDarkened3 }}">
 				{% else %}
 					<div class="card hoverable grey">
 				{% endif%}
