@@ -47,12 +47,18 @@ class Color(models.Model):
 class Chat_Room(models.Model):
 	title = models.CharField(max_length=200)
 	color = models.ForeignKey(Color, default=None, on_delete=models.CASCADE, null=True)
+	image = models.ImageField(upload_to='chat/static/chat/', null=True)
 	
 	def __str__(self):
-	    return self.title
+		return self.title
 
 	def __repr__(self):
-	    return self.__str__()
+		return self.__str__()
+
+	def getImage(self):
+		if not self.image: return ""
+		return self.image.url.replace('chat/static/', '')
+
 
 class Chat_User(models.Model):
 	django_user = models.OneToOneField(User, default=None, on_delete=models.CASCADE)

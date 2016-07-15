@@ -1,9 +1,15 @@
 {% extends 'chat/base.html' %}
 
+{% load staticfiles %}
+
 {% block body_style %}
 	{% if room.color %}
 		background: {{ room.color.color }}
 	{% endif %}
+{% endblock %}
+
+{% block icon_block %}
+	{% static room.getImage %}
 {% endblock %}
 
 {% block nav_buttons_block %}
@@ -35,7 +41,6 @@
 			</div>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-		<!-- --><script src="" type=""></script>
 		<script type="text/javascript">
 			window.setInterval(refreshContent, 1500);
 			$(focus_and_clear_and_scroll);
