@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^polls/', include('polls.urls')),
     url(r'^pimote/', include('pimote.urls')),
     url(r'^chat/', include('chat.urls')),
+    url(r'^gamio/', include('gamio.urls')),
 		url(r'^locked/$', locked_out, name='locked_out'),
 		url(r'^captcha/', include('captcha.urls')),
 ]

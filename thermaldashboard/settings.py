@@ -26,6 +26,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'gamio.apps.GamioConfig',
     'chat.apps.ChatConfig',
     'polls.apps.PollsConfig',
     'pimote.apps.PimoteConfig',

@@ -1,0 +1,68 @@
+{% extends 'chat/base.html' %}
+
+{% load staticfiles %}
+
+{% block page_title_block %}Gamio{% endblock %}
+{% block header_color_block %}purple{% endblock %}
+{% block header_title_block %}Gamio{% endblock %}
+{% block footer_color_block %}purple{% endblock %}
+{% block footer_title_block %}Gamio{% endblock %}
+{% block icon_background_block %}white{% endblock %}
+
+{% block icon_block %}{% static 'gamio/sprites/paperairplane.png' %}{% endblock %}
+{% block favicon_block %}{% static 'gamio/sprites/paperairplane.png' %}{% endblock %}
+{% block icon_size_percentage_block %}6{% endblock %}
+
+{% block body_block %} 
+<div class='container'>
+	<div class='row'>
+		<div class='card' id='game-container'></div>
+	</div>
+</div>
+<script src="{% static 'gamio/pixi.js/bin/pixi.min.js' %}"></script>
+<script type='text/javascript'>
+// You can use either `new PIXI.WebGLRenderer`, `new PIXI.CanvasRenderer`, or `PIXI.autoDetectRenderer`
+// which will try to choose the best renderer for the environment you are in.
+var renderer = new PIXI.WebGLRenderer(800, 600);
+renderer.backgroundColor = 0xFFFFFF;
+
+// The renderer will create a canvas element for you that you can then insert into the DOM.
+$("#game-container").append(renderer.view);
+
+// You need to create a root container that will hold the scene you want to draw.
+var stage = new PIXI.Container();
+
+// Declare a global variable for our sprite so that the animate function can access it.
+var plane = null;
+
+// load the texture we need
+PIXI.loader.add('plane', '{% static 'gamio/sprites/paperairplane.png' %}').load(function (loader, resources) {
+	// This creates a texture from a 'plane.png' image.
+	plane = new PIXI.Sprite(resources.plane.texture);
+
+	// Setup the position and scale of the plane
+	plane.position.x = 400;
+	plane.position.y = 300;
+
+	plane.scale.x = .5;
+	plane.scale.y = .5;
+
+	// Add the plane to the scene we are building.
+	stage.addChild(plane);
+
+	// kick off the animation loop (defined below)
+	animate();
+});
+
+function animate() {
+	// start the timer for the next animation loop
+	requestAnimationFrame(animate);
+
+	// each frame we spin the plane around a bit
+	plane.rotation += 0.01;
+
+	// this is the main render call that makes pixi draw your container and its children.
+	renderer.render(stage);
+}
+</script>
+{% endblock %}
