@@ -17,7 +17,7 @@
 <br/>
 <div class='container' style='margin-top=150px;'>
 	<div class='row'>
-		<div class='card hoverable white' id='game-container'></div>
+		<div class='card hoverable light-blue lighten-1' id='game-container'></div>
 	</div>
 </div>
 <script src="{% static 'gamio/pixi.js/bin/pixi.min.js' %}"></script>
@@ -78,9 +78,9 @@ function onKeyUp(key) {
 // which will try to choose the best renderer for the environment you are in.
 var canvasMultiplier = 1.35;
 var canvasHeight = 600 * canvasMultiplier;
-var canvasWidth = 890 * canvasMultiplier;
+var canvasWidth = 960 * canvasMultiplier;
 var renderer = new PIXI.WebGLRenderer(canvasWidth, canvasHeight);
-renderer.backgroundColor = 0xFFFFFF;
+renderer.backgroundColor = 0x29b6f6;
 
 $("#game-container").append(renderer.view);
 
@@ -138,19 +138,34 @@ PIXI.loader.add('plane', '{% static 'gamio/sprites/paperairplane.png' %}').load(
 
 function animatePlane() {
 	requestAnimationFrame(animatePlane);
+	var rotationMag = 0.02
 	if(KEYLEFTDOWN) { 
-		plane.rotation -= 0.01;
+		plane.rotation -= rotationMag;
 	}
 	if(KEYRIGHTDOWN) {
-		plane.rotation += 0.01;
+		plane.rotation += rotationMag;
 	}
 	plane.scale.x = plane.scale.x*.9995;
 	plane.scale.y = plane.scale.y*.9995;
+	
+	var speed = 2;
+	if(KEYUPDOWN) speed = speed*2;
+	if(KEYDOWNDOWN) speed = speed*.5;
+	plane.position.x = plane.position.x + speed * Math.cos(plane.rotation - 3.14159/2);
+	plane.position.y = plane.position.y + speed * Math.sin(plane.rotation - 3.14159/2);
 
-	var speed = 1;
-	console.log(plane.rotation);
-	plane.position.x = plane.position.x + speed * Math.cos(plane.rotation - 3.14/2);
-	plane.position.y = plane.position.y + speed * Math.sin(plane.rotation - 3.14/2);
+	if(plane.position.x > canvasWidth) {
+		plane.position.x = 0;
+	}
+	if(plane.position.x < 0) {
+		plane.position.x = canvasWidth;
+	}
+	if(plane.position.y > canvasHeight) {
+		plane.position.y = 0;
+	}
+	if(plane.position.y < 0) {
+		plane.position.y = canvasHeight;
+	}
 
 	renderer.render(stage);
 }
