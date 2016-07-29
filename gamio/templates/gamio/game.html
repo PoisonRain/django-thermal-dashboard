@@ -74,6 +74,23 @@ function onKeyUp(key) {
 	}
 }
 
+function setRandomPosition(sprite) {
+	sprite.position.y = Math.random() * (canvasHeight-100) + 50;
+	sprite.position.x = Math.random() * (canvasWidth-100) + 50;
+	console.log(sprite.position.x + " " + sprite.position.y);
+}
+
+//anchor must be set to middle
+function hasCollision(s1, s2) {
+	var s1r = s1.x + s1.width/2;
+	var s1l = s1.x - s1.width/2;
+	var s1u = s1.y + s1.height/2;
+	var s1b = s1.y - s1.height/2;
+	var samecolumn = (s2.x < s1r && s2.x > s1l);
+	var samerow = (s2.y < s1u && s2.y > s1b);
+	return samecolumn && samerow;
+}
+
 // You can use either `new PIXI.WebGLRenderer`, `new PIXI.CanvasRenderer`, or `PIXI.autoDetectRenderer`
 // which will try to choose the best renderer for the environment you are in.
 var canvasMultiplier = 1.35;
@@ -90,13 +107,51 @@ var stage = new PIXI.Container();
 // Declare a global variable for our sprite so that the animate function can access it.
 var plane = null;
 var cloud = null;
+var updraft = null;
+var downdraft = null;
+
+var maxAltitude = 1000;
+var altitude = maxAltitude;
+var altitudeCounter = new PIXI.Text("Altitude: "+maxAltitude);
+stage.addChild(altitudeCounter);
+
+var score = 0;
+var scoreCounter = new PIXI.Text("Score: "+score);
+scoreCounter.anchor.x=1;
+scoreCounter.position.x=canvasWidth;
+stage.addChild(scoreCounter);
+
+var gameOverText = new PIXI.Text("Game Over");
+var tryAgainButton = new PIXI.Text("Try Again?");
+tryAgainButton.anchor.x = .5;
+tryAgainButton.position.x = canvasWidth/2;
+tryAgainButton.position.y = canvasHeight*3/4;
+tryAgainButton.interactive = true;
+tryAgainButton.on('mousedown', function() {
+	score = 0;
+	altitude = maxAltitude;
+	plane.position.x = canvasWidth/2;
+	plane.position.y = canvasHeight/2;
+	plane.rotation = 0;
+	gameActive = true;
+	stage.removeChild(tryAgainButton);
+	stage.removeChild(gameOverText);
+	setRandomPosition(updraft);
+	setRandomPosition(downdraft);
+	animatePlane();
+});
+
+var gameActive = true;
 
 PIXI.loader.add('cloud', '{% static 'gamio/sprites/cloud.png' %}').load(function(loader, resources) {
 	cloud = new PIXI.Sprite(resources.cloud.texture);
 
 	cloud.position.x = 0;
-	cloud.position.y = Math.random() * (canvasHeight-100) - 100;
+	cloud.position.y = Math.random() * (canvasHeight-100) + 50;
 	console.log(cloud.position.y);
+
+	cloud.anchor.x = .5;
+	cloud.anchor.y = .5;
 
 	cloud.scale.x = .5;
 	cloud.scale.y = .5;
@@ -109,7 +164,7 @@ function animateCloud() {
 	requestAnimationFrame(animateCloud);
 	cloud.position.x += 2;
 	if(cloud.position.x > canvasWidth) {
-		cloud.position.x = -200;
+		cloud.position.x = -cloud.width/2;
 		cloud.position.y = Math.random() * (canvasHeight-100) - 100;
 		var newscale = Math.random() * (1-.3)+.3;
 		cloud.scale.x = newscale;
@@ -120,14 +175,75 @@ function animateCloud() {
 	renderer.render(stage);
 }
 
+PIXI.loader.add('downdraft', '{% static 'gamio/sprites/updraft/updraft.json' %}').load(function (loader, resources) {
+	var frames = [];
+
+	for(var i=1; i<=3; i++) {
+		frames.push(PIXI.Texture.fromFrame('updraft'+i+'.png'));
+	}
+
+	downdraft = new PIXI.extras.MovieClip(frames);
+
+	downdraft.anchor.set(.5);
+
+	setRandomPosition(downdraft)
+
+	downdraft.rotation += 3.1415;
+
+	downdraft.scale.x = .25;
+	downdraft.scale.y = .25;
+
+	downdraft.animationSpeed = .10;
+
+	downdraft.play();
+
+	stage.addChild(downdraft);
+
+	animateDowndraft();
+});
+
+function animateDowndraft() {
+	requestAnimationFrame(animateDowndraft);
+	renderer.render(stage);
+}
+
+PIXI.loader.add('updraft', '{% static 'gamio/sprites/updraft/updraft.json' %}').load(function (loader, resources) {
+	var frames = [];
+	for(var i=1; i<=3; i++) {
+		frames.push(PIXI.Texture.fromFrame('updraft'+i+'.png'));
+	}
+	updraft = new PIXI.extras.MovieClip(frames);
+
+	updraft.anchor.set(.5);
+
+	setRandomPosition(updraft);
+
+	updraft.scale.x = .25;
+	updraft.scale.y = .25;
+
+	updraft.animationSpeed = .10;
+
+	updraft.play();
+
+	stage.addChild(updraft);
+
+	animateUpdraft();
+});
+
+function animateUpdraft() {
+	requestAnimationFrame(animateUpdraft);
+	renderer.render(stage);
+}
+
+var maxPlaneScale = .3;
 PIXI.loader.add('plane', '{% static 'gamio/sprites/paperairplane.png' %}').load(function (loader, resources) {
 	plane = new PIXI.Sprite(resources.plane.texture);
 
 	plane.position.x = canvasWidth/2;
 	plane.position.y = canvasHeight/2;
 
-	plane.scale.x = .3;
-	plane.scale.y = .3;
+	plane.scale.x = maxPlaneScale;
+	plane.scale.y = maxPlaneScale;
 
 	plane.anchor.x = .5
 	plane.anchor.y = .5
@@ -136,17 +252,67 @@ PIXI.loader.add('plane', '{% static 'gamio/sprites/paperairplane.png' %}').load(
 	animatePlane();
 });
 
+var lastUpdraft = null;
+var lastDowndraft = new Date();
 function animatePlane() {
+	if(altitude <= 0) {
+		gameOverText.anchor.x = .5;
+		gameOverText.anchor.y = .5;
+		gameOverText.position.x = canvasWidth/2;
+		gameOverText.position.y = canvasHeight/2;
+		stage.addChild(tryAgainButton);
+		stage.addChild(gameOverText);
+		gameActive = false;
+		return;
+	}
 	requestAnimationFrame(animatePlane);
-	var rotationMag = 0.02
+
+	var rotationMag = 0.02;
 	if(KEYLEFTDOWN) { 
 		plane.rotation -= rotationMag;
 	}
 	if(KEYRIGHTDOWN) {
 		plane.rotation += rotationMag;
 	}
-	plane.scale.x = plane.scale.x*.9995;
-	plane.scale.y = plane.scale.y*.9995;
+
+	if(hasCollision(updraft, plane)) {
+		console.log("COLLIDING");
+		if(lastUpdraft == null || lastUpdraft.getTime() - new Date().getTime() < -1000) {
+			lastUpdraft = new Date();
+			setRandomPosition(updraft);
+			altitude+=200;
+			score+=200;
+			scoreCounter.text = "Score: " + score;
+		}
+		else {
+			console.log(lastUpdraft.getTime() - new Date().getTime());
+		}
+	}
+	
+	if(hasCollision(downdraft, plane)) {
+		console.log("COLLIDING");
+		if(lastDowndraft == null || lastDowndraft.getTime() - new Date().getTime() < -1000) {
+			lastDowndraft = new Date();
+			setRandomPosition(downdraft);
+			altitude-=200;
+			scoreCounter.text = "Score: " + score;
+		}
+		else {
+			console.log(lastDowndraft.getTime() - new Date().getTime());
+		}
+	}
+	else if(lastDowndraft.getTime() - new Date().getTime() < -10000) {
+		lastDowndraft = new Date();
+		setRandomPosition(downdraft);
+	}
+
+	plane.scale.x = maxPlaneScale * (altitude / maxAltitude);
+	plane.scale.y = maxPlaneScale * (altitude / maxAltitude);
+
+	if(!hasCollision(cloud, plane)) {
+		altitude = altitude-1;
+	}
+	altitudeCounter.text = "Altitude: " + altitude;
 	
 	var speed = 2;
 	if(KEYUPDOWN) speed = speed*2;
