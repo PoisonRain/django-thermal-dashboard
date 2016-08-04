@@ -22,6 +22,7 @@
 </div>
 <script src="{% static 'gamio/pixi.js/bin/pixi.min.js' %}"></script>
 <script type='text/javascript'>
+
 var KEYLEFT = 65;
 var KEYRIGHT = 68;
 var KEYUP = 87;
@@ -102,13 +103,6 @@ $("#game-container").append(renderer.view);
 
 // You need to create a root container that will hold the scene you want to draw.
 var stage = new PIXI.Container();
-stage.updateLayers = function() {
-	stage.children.sort(function(a,b) {
-		a.zIndex = a.zIndex || 0;
-		b.zIndex = b.zIndex || 0;
-		return a.zIndex - b.zIndex;
-	});
-};
 
 // Declare a global variable for our sprite so that the animate function can access it.
 var plane = null;
@@ -162,8 +156,6 @@ PIXI.loader.add('cloud', '{% static 'gamio/sprites/cloud.png' %}').load(function
 	cloud.scale.x = .5;
 	cloud.scale.y = .5;
 
-	cloud.zIndex = 3;
-
 	stage.addChild(cloud);
 	animateCloud();
 });
@@ -183,12 +175,10 @@ function animateCloud() {
 	renderer.render(stage);
 }
 
-var draftAnimationSpeed = .13;
-
 PIXI.loader.add('downdraft', '{% static 'gamio/sprites/updraft/updraft.json' %}').load(function (loader, resources) {
 	var frames = [];
 
-	for(var i=0; i<6; i++) {
+	for(var i=1; i<=3; i++) {
 		frames.push(PIXI.Texture.fromFrame('updraft'+i+'.png'));
 	}
 
@@ -203,9 +193,7 @@ PIXI.loader.add('downdraft', '{% static 'gamio/sprites/updraft/updraft.json' %}'
 	downdraft.scale.x = .25;
 	downdraft.scale.y = .25;
 
-	downdraft.animationSpeed = draftAnimationSpeed;
-	
-	downdraft.zIndex = 5;
+	downdraft.animationSpeed = .10;
 
 	downdraft.play();
 
@@ -219,9 +207,36 @@ function animateDowndraft() {
 	renderer.render(stage);
 }
 
+function addDash(rotation, px, py) {
+	PIXI.loader.add('dash', '{% static 'gamio/sprites/dash.png' %}').load(function (loader, resources) {
+		dash = new PIXI.Sprite(resources.dash.texture);
+
+		dash.anchor.set(.5);
+
+		setRandomPosition(dash)
+
+		dash.rotation = rotation;
+
+		dash.position.x = px;
+		dash.position.y = py;
+
+		dash.scale.x = .25;
+		dash.scale.y = .25;
+
+		stage.addChild(dash);
+
+		animateDash();
+	});
+}
+
+function animateDash() {
+	requestAnimationFrame(animateDowndraft);
+	renderer.render(stage);
+}
+
 PIXI.loader.add('updraft', '{% static 'gamio/sprites/updraft/updraft.json' %}').load(function (loader, resources) {
 	var frames = [];
-	for(var i=0; i<6; i++) {
+	for(var i=1; i<=3; i++) {
 		frames.push(PIXI.Texture.fromFrame('updraft'+i+'.png'));
 	}
 	updraft = new PIXI.extras.MovieClip(frames);
@@ -233,9 +248,7 @@ PIXI.loader.add('updraft', '{% static 'gamio/sprites/updraft/updraft.json' %}').
 	updraft.scale.x = .25;
 	updraft.scale.y = .25;
 
-	updraft.animationSpeed = draftAnimationSpeed;
-
-	updraft.zIndex = 5;
+	updraft.animationSpeed = .10;
 
 	updraft.play();
 
@@ -249,46 +262,6 @@ function animateUpdraft() {
 	renderer.render(stage);
 }
 
-var pixiresources;
-PIXI.loader.add('dash', '{% static 'gamio/sprites/dash.png' %}').load(function (loader, resources) {
-	var dash = new PIXI.Sprite(resources.dash.texture);
-	pixiresources = resources;
-});
-
-var dashes = [];
-function addDash(rotation, px, py) {
-	var dash = new PIXI.Sprite(pixiresources.dash.texture);
-
-	dash.anchor.set(.5);
-
-	dash.rotation = rotation;
-
-	dash.position.x = px;
-	dash.position.y = py;
-
-	dash.zIndex = 0;
-
-	dash.scale.x = .25;
-	dash.scale.y = .25;
-
-	stage.addChild(dash);
-	stage.updateLayers();
-
-	if(dashes.length > 15) {
-		var toRemove = dashes.shift();
-		stage.removeChild(toRemove);
-	}
-
-	dashes.push(dash);
-
-	animateDash();
-}
-
-function animateDash() {
-	//requestAnimationFrame(animateDowndraft);
-	renderer.render(stage);
-}
-
 var maxPlaneScale = .3;
 PIXI.loader.add('plane', '{% static 'gamio/sprites/paperairplane.png' %}').load(function (loader, resources) {
 	plane = new PIXI.Sprite(resources.plane.texture);
@@ -299,10 +272,8 @@ PIXI.loader.add('plane', '{% static 'gamio/sprites/paperairplane.png' %}').load(
 	plane.scale.x = maxPlaneScale;
 	plane.scale.y = maxPlaneScale;
 
-	plane.zIndex = 4;
-
-	plane.anchor.x = .5;
-	plane.anchor.y = .75;
+	plane.anchor.x = .5
+	plane.anchor.y = .5
 	
 	stage.addChild(plane);
 	animatePlane();
@@ -311,7 +282,6 @@ PIXI.loader.add('plane', '{% static 'gamio/sprites/paperairplane.png' %}').load(
 var lastUpdraft = null;
 var lastDowndraft = new Date();
 var frameCounter = 0;
-var updraftAltitude = 250;
 function animatePlane() {
 	frameCounter += 1;
 	if(altitude <= 0) {
@@ -326,7 +296,7 @@ function animatePlane() {
 	}
 	requestAnimationFrame(animatePlane);
 
-	if(frameCounter % 10 == 0) {
+	if(frameCounter % 30 == 0) {
 		addDash(plane.rotation, plane.position.x, plane.position.y);
 	}
 
@@ -343,11 +313,7 @@ function animatePlane() {
 		if(lastUpdraft == null || lastUpdraft.getTime() - new Date().getTime() < -1000) {
 			lastUpdraft = new Date();
 			setRandomPosition(updraft);
-			altitude+=updraftAltitude;
-
-			updraftAltitude -= 2;
-			if(updraftAltitude < 50) updraftAltitude = 50;
-
+			altitude+=200;
 			score+=200;
 			scoreCounter.text = "Score: " + score;
 		}
@@ -382,9 +348,7 @@ function animatePlane() {
 	altitudeCounter.text = "Altitude: " + altitude;
 	
 	var speed = 2;
-	if(KEYUPDOWN) {
-		speed = speed*2;
-	}
+	if(KEYUPDOWN) speed = speed*2;
 	if(KEYDOWNDOWN) speed = speed*.5;
 	plane.position.x = plane.position.x + speed * Math.cos(plane.rotation - 3.14159/2);
 	plane.position.y = plane.position.y + speed * Math.sin(plane.rotation - 3.14159/2);
