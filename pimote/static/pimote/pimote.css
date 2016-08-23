@@ -1,15 +1,30 @@
+.twitchIcon {
+	height: auto;
+	width: 50%;
+	vertical-align: top !important;
+}
+
+.twitchContainer {
+	vertical-align: middle !important;
+	font-size: 25px;
+	padding: 30px;
+	margin: 5px;
+	width: 100%;
+	height: 100%;
+}
+
 .pbtn {
 	vertical-align: middle !important;
 	width: 100% !important;
 	height: 100% !important;
-	font-size: 15px !important;
+	font-size: 25px !important;
 	padding: 78px !important;
 	margin: 5px;
 }
 
 .picon {
 	font-size: 6em !important;
-	height: 100% !important;	
+	height: 100%;	
 }
 
 .pdiv {
