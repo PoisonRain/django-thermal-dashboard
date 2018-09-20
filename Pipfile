@@ -12,6 +12,7 @@ captcha = "*"
 django-simple-captcha = "*"
 django-easy-timezones = "*"
 django-otp = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "2.7"
