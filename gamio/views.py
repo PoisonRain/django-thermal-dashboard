@@ -9,6 +9,6 @@ from django_otp.decorators import otp_required
 
 # Create your views here.
 
-@login_required
+#@login_required
 def game(request):
 	return render(request, "gamio/game.html", {})
