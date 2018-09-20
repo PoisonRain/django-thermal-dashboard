@@ -21,7 +21,7 @@ SECRET_KEY = 'h=moen_d7=d^1sf8s%8$#fab+9_8hrf+(5cingi9ebjxaoq*z8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['gravio.herokuapp.com'] 
+ALLOWED_HOSTS = ['localhost', 'gravio.herokuapp.com'] 
 
 # Application definition
 
@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'axes.apps.AppConfig',
     'captcha',
 ]
 
@@ -101,8 +100,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AXES_LOGGER = "axes.watch_login"
-AXES_LOCKOUT_URL = '/locked'
 
 LOGGING = {
 		'version': 1,
@@ -118,11 +115,6 @@ LOGGING = {
 					'class': 'logging.FileHandler',
 					'filename': 'logs/warning.log',
 				},
-				'axes.watch_login': {
-						'level': 'DEBUG',
-						'class': 'logging.FileHandler',
-						'filename': 'logs/axe.log',
-				}
 		},
 		'loggers': {
 				'django': {
@@ -137,18 +129,6 @@ LOGGING = {
 				},
 		},
 }
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    },
-    'axes_cache': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-}
-
-AXES_CACHE='axes_cache'
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/

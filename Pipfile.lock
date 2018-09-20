@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a3072b405e4d61ce71c29ab9e2a42f50f80df6a430a86b4b0c4274821e84f66b"
+            "sha256": "c5bb0590ab8d210d562602f4f7e7c9dba235bf871f5b91aabafe676572b961a1"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -32,21 +32,6 @@
             "index": "pypi",
             "version": "==1.11.15"
         },
-        "django-appconf": {
-            "hashes": [
-                "sha256:6a4d9aea683b4c224d97ab8ee11ad2d29a37072c0c6c509896dd9857466fb261",
-                "sha256:ddab987d14b26731352c01ee69c090a4ebfc9141ed223bef039d79587f22acd9"
-            ],
-            "version": "==1.0.2"
-        },
-        "django-axes": {
-            "hashes": [
-                "sha256:155e12f95d0691ac15fe68c7274752356c371df93e8ac97bd1c1629ef682cf50",
-                "sha256:4129f6fa089778a4be11c372e3398e85946a369ad3b9a6a642bcce774db81f4a"
-            ],
-            "index": "pypi",
-            "version": "==4.4.0"
-        },
         "django-easy-timezones": {
             "hashes": [
                 "sha256:1c90f8a9731bf0762b6c7d239beb5b9434f45e8c9bbdc3586faa69851d00c434",
@@ -54,12 +39,6 @@
             ],
             "index": "pypi",
             "version": "==0.8.0"
-        },
-        "django-ipware": {
-            "hashes": [
-                "sha256:a7c7a8fd019dbdc9c357e6e582f65034e897572fc79a7e467674efa8aef9d00b"
-            ],
-            "version": "==2.1.0"
         },
         "django-otp": {
             "hashes": [
