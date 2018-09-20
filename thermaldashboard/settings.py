@@ -21,7 +21,7 @@ SECRET_KEY = 'h=moen_d7=d^1sf8s%8$#fab+9_8hrf+(5cingi9ebjxaoq*z8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = [] 
+ALLOWED_HOSTS = ['gravio.herokuapp.com'] 
 
 # Application definition
 
